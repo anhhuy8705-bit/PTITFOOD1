@@ -1,0 +1,742 @@
+# Xây dựng Web App Food Delivery giống GrabFood
+
+Hãy xây dựng một web app đặt món ăn cơ bản lấy cảm hứng từ GrabFood, tập trung vào UI/UX hiện đại, sạch sẽ, responsive và dễ sử dụng.
+
+## 1. Công nghệ bắt buộc
+
+Chỉ sử dụng:
+
+* HTML5
+* JavaScript ES6+ / Vanilla JavaScript
+* TailwindCSS
+* `localStorage` để lưu dữ liệu phía client
+* `db.js` làm nơi quản lý dữ liệu mock và export/import dữ liệu
+
+Không sử dụng:
+
+* React
+* Vue
+* Angular
+* Next.js
+* Node.js backend
+* Database server
+* TypeScript
+* jQuery
+* Bootstrap
+* Framework frontend khác
+
+Có thể sử dụng TailwindCSS CDN để đơn giản hóa việc chạy project.
+
+## 2. Cấu trúc project
+
+Tạo project theo cấu trúc:
+
+```text
+food-delivery/
+│
+├── index.html
+├── products.html
+├── product-detail.html
+├── cart.html
+├── checkout.html
+│
+├── css/
+│   └── style.css
+│
+├── js/
+│   ├── db.js
+│   ├── app.js
+│   ├── home.js
+│   ├── products.js
+│   ├── product-detail.js
+│   ├── cart.js
+│   └── checkout.js
+│
+└── assets/
+    └── images/
+```
+
+Mỗi page phải có JavaScript riêng khi cần, nhưng các logic dùng chung nên đặt trong `app.js`.
+
+## 3. Database mock
+
+Tạo file:
+
+```text
+js/db.js
+```
+
+File này chứa toàn bộ dữ liệu mock và phải sử dụng ES Module:
+
+```js
+export const products = [...]
+export const reviews = [...]
+export const categories = [...]
+```
+
+Các file khác import dữ liệu từ `db.js` bằng:
+
+```js
+import { products, reviews, categories } from './db.js';
+```
+
+Có ít nhất 15 món ăn.
+
+Mỗi món cần có:
+
+```js
+{
+  id,
+  name,
+  description,
+  price,
+  image,
+  category,
+  rating,
+  reviewCount,
+  restaurant,
+  preparationTime
+}
+```
+
+Tạo khoảng 5-6 category, ví dụ:
+
+* Cơm
+* Mì
+* Burger
+* Pizza
+* Gà
+* Đồ uống
+
+15 món ăn phải phân bố tương đối đều giữa các category.
+
+Có thể sử dụng ảnh món ăn từ nguồn ảnh public phù hợp. Nếu dùng URL ảnh thì đảm bảo ảnh có thể hiển thị trực tiếp trên browser.
+
+## 4. Reviews
+
+Tạo sẵn khoảng 2-3 review mẫu.
+
+Không cần tạo 2-3 review riêng biệt cho từng món. Có thể sử dụng một nhóm review mẫu và hiển thị chúng cho các món khác nhau.
+
+Review có cấu trúc:
+
+```js
+{
+  id,
+  productId,
+  userName,
+  rating,
+  comment,
+  date
+}
+```
+
+Người dùng có thể tự đánh giá món ăn.
+
+Khi submit review:
+
+1. Kiểm tra rating.
+2. Kiểm tra nội dung review.
+3. Lưu review vào `localStorage`.
+4. Cập nhật UI ngay lập tức.
+5. Tính lại rating trung bình của món ăn.
+
+Không cần backend.
+
+## 5. localStorage
+
+Sử dụng `localStorage` để quản lý:
+
+```text
+cart
+reviews
+user
+orders
+```
+
+Ví dụ:
+
+```js
+localStorage.setItem('cart', JSON.stringify(cart));
+```
+
+Tạo các helper function dùng chung để:
+
+* getCart()
+* saveCart()
+* addToCart()
+* removeFromCart()
+* updateCartQuantity()
+* clearCart()
+* getReviews()
+* saveReview()
+* getOrders()
+* saveOrder()
+
+Không lặp lại logic localStorage ở quá nhiều file.
+
+## 6. Trang Home
+
+Tạo:
+
+```text
+index.html
+```
+
+Home page cần có UI đẹp theo phong cách food delivery app.
+
+Header:
+
+* Logo Foodie
+* Search
+* Home
+* Products
+* Cart
+* User/avatar
+* Badge hiển thị số lượng sản phẩm trong cart
+
+Hero section:
+
+* Banner lớn
+* Heading hấp dẫn
+* Mô tả ngắn
+* CTA "Đặt món ngay"
+* Hình ảnh món ăn
+
+Category section:
+
+```text
+Tất cả
+Cơm
+Mì
+Burger
+Pizza
+Gà
+Đồ uống
+```
+
+Popular foods:
+
+Hiển thị khoảng 6 món nổi bật.
+
+Mỗi food card gồm:
+
+* Ảnh
+* Tên món
+* Restaurant
+* Rating
+* Review count
+* Giá
+* Nút Add to Cart
+
+Thêm section:
+
+```text
+Why choose us?
+```
+
+với 3-4 feature:
+
+* Giao hàng nhanh
+* Món ăn đa dạng
+* Thanh toán an toàn
+* Theo dõi đơn hàng
+
+Footer đầy đủ.
+
+## 7. Trang Products
+
+Tạo:
+
+```text
+products.html
+```
+
+Đây là trang danh sách toàn bộ 15 món ăn.
+
+UI gồm:
+
+* Search
+* Category filter
+* Sort
+* Food grid responsive
+
+Có thể sort:
+
+```text
+Phổ biến nhất
+Giá thấp → cao
+Giá cao → thấp
+Đánh giá cao
+```
+
+Search phải tìm theo:
+
+* tên món
+* restaurant
+* category
+
+Food card phải có:
+
+* image
+* name
+* restaurant
+* category
+* rating
+* price
+* Add to Cart
+* View Detail
+
+Khi click View Detail chuyển tới:
+
+```text
+product-detail.html?id=PRODUCT_ID
+```
+
+## 8. Trang Product Detail
+
+Tạo:
+
+```text
+product-detail.html
+```
+
+Lấy `id` từ URL:
+
+```js
+const params = new URLSearchParams(window.location.search);
+const productId = params.get('id');
+```
+
+Hiển thị:
+
+* Large product image
+* Product name
+* Restaurant
+* Category
+* Description
+* Rating
+* Review count
+* Price
+* Preparation time
+* Quantity selector
+* Add to Cart
+
+Bên dưới có section:
+
+```text
+Customer Reviews
+```
+
+Hiển thị review của món.
+
+Mỗi review gồm:
+
+* Avatar chữ cái
+* User name
+* Rating stars
+* Comment
+* Date
+
+Có form:
+
+```text
+Đánh giá món ăn
+
+[ ⭐ ⭐ ⭐ ⭐ ⭐ ]
+
+[ Nội dung đánh giá ]
+
+[ Submit Review ]
+```
+
+Sau khi submit phải cập nhật UI mà không cần reload.
+
+## 9. Trang Cart
+
+Tạo:
+
+```text
+cart.html
+```
+
+Hiển thị tất cả món trong giỏ.
+
+Mỗi item:
+
+* Image
+* Name
+* Price
+* Quantity
+* +/- quantity
+* Remove
+
+Phần summary:
+
+```text
+Subtotal
+Delivery Fee
+Discount
+Total
+```
+
+Có:
+
+```text
+[ Continue Shopping ]
+[ Proceed to Checkout ]
+```
+
+Nếu cart rỗng:
+
+Hiển thị empty state đẹp:
+
+```text
+Your cart is empty
+Khám phá các món ăn ngon và thêm vào giỏ hàng.
+[ Browse Foods ]
+```
+
+Cart phải được đồng bộ với localStorage.
+
+Badge cart trên header phải cập nhật chính xác ở tất cả các trang.
+
+## 10. Trang Checkout
+
+Tạo:
+
+```text
+checkout.html
+```
+
+Đây chỉ là mô phỏng thanh toán, KHÔNG cần payment gateway thật.
+
+Layout chia thành 2 phần:
+
+### Delivery Information
+
+Form:
+
+```text
+Full Name
+Phone Number
+Address
+Note
+```
+
+### Payment Method
+
+Có thể chọn:
+
+```text
+Cash on Delivery
+Credit Card
+E-Wallet
+```
+
+Không cần xử lý thanh toán thật.
+
+Bên phải hiển thị:
+
+```text
+Order Summary
+
+Product
+Quantity
+Price
+
+Subtotal
+Delivery Fee
+Discount
+Total
+```
+
+Button:
+
+```text
+Place Order
+```
+
+Khi click:
+
+1. Validate form.
+2. Tạo order object.
+3. Lưu order vào localStorage.
+4. Xóa cart.
+5. Hiển thị modal thành công.
+
+Modal:
+
+```text
+Order placed successfully!
+
+Order #FD-XXXXXX
+
+Estimated delivery:
+25-35 minutes
+
+[ Back to Home ]
+```
+
+## 11. UI/UX
+
+Đây là phần rất quan trọng.
+
+Thiết kế theo phong cách hiện đại giống các food delivery app như GrabFood nhưng KHÔNG copy nguyên bản UI/branding của Grab.
+
+Sử dụng:
+
+* TailwindCSS
+* Rounded cards
+* Soft shadow
+* Clean spacing
+* Modern typography
+* Food images lớn
+* Button rõ ràng
+* Badge
+* Modal
+* Toast notification
+* Hover animation
+* Smooth transition
+
+Màu chủ đạo có thể dùng:
+
+```text
+Primary: orange/red
+Background: #f8fafc
+Text: dark slate
+White cards
+```
+
+Không làm UI quá nhiều màu.
+
+Food card nên có hiệu ứng:
+
+```text
+hover:-translate-y-1
+hover:shadow-lg
+transition
+```
+
+Responsive:
+
+```text
+Mobile
+Tablet
+Desktop
+```
+
+Desktop có thể sử dụng grid:
+
+```text
+grid-cols-1
+sm:grid-cols-2
+lg:grid-cols-3
+xl:grid-cols-4
+```
+
+Mobile header phải dễ sử dụng.
+
+## 12. Toast Notification
+
+Tạo hệ thống toast dùng chung.
+
+Ví dụ khi thêm sản phẩm:
+
+```text
+✓ Đã thêm "Burger Bò Phô Mai" vào giỏ hàng
+```
+
+Toast tự động biến mất sau khoảng 2-3 giây.
+
+Có thể đặt logic trong:
+
+```text
+app.js
+```
+
+## 13. Cart Badge
+
+Header của tất cả page phải có cart badge.
+
+Ví dụ:
+
+```text
+Cart (3)
+```
+
+Nếu không có sản phẩm thì không hiển thị badge hoặc hiển thị `0`.
+
+Sau mọi thao tác:
+
+* add
+* remove
+* increase
+* decrease
+* checkout
+
+phải cập nhật badge.
+
+## 14. Navigation
+
+Các page phải liên kết với nhau:
+
+```text
+Home
+ ↓
+Products
+ ↓
+Product Detail
+ ↓
+Cart
+ ↓
+Checkout
+ ↓
+Success
+```
+
+Header trên tất cả page:
+
+```text
+Foodie | Home | Foods | Cart | User
+```
+
+Active navigation item cần được highlight.
+
+## 15. Code architecture
+
+Ưu tiên code modular.
+
+Ví dụ `app.js`:
+
+```js
+export function getCart() {}
+export function saveCart(cart) {}
+export function addToCart(product, quantity = 1) {}
+export function removeFromCart(productId) {}
+export function updateCartQuantity(productId, quantity) {}
+export function updateCartBadge() {}
+export function showToast(message, type = 'success') {}
+export function formatCurrency(price) {}
+```
+
+Không viết toàn bộ project thành một file JavaScript duy nhất.
+
+Sử dụng:
+
+```js
+import
+export
+async/await
+const
+let
+template literals
+optional chaining
+destructuring
+```
+
+khi phù hợp.
+
+## 16. Error handling
+
+Phải xử lý:
+
+* Product không tồn tại
+* URL không có product ID
+* Cart rỗng
+* localStorage bị lỗi
+* Review không hợp lệ
+* Checkout thiếu thông tin
+* Số lượng sản phẩm nhỏ hơn 1
+
+Nếu product không tồn tại:
+
+```text
+Product not found
+[ Back to Products ]
+```
+
+## 17. Currency
+
+Sử dụng tiền Việt Nam:
+
+```text
+25.000 ₫
+45.000 ₫
+```
+
+Tạo helper:
+
+```js
+formatCurrency(price)
+```
+
+để format thống nhất toàn bộ app.
+
+## 18. Seed data
+
+Khi app chạy lần đầu, nếu localStorage chưa có dữ liệu review/cart thì khởi tạo dữ liệu mặc định từ `db.js`.
+
+Không được overwrite dữ liệu người dùng ở những lần reload tiếp theo.
+
+## 19. Accessibility
+
+Đảm bảo:
+
+* button có text rõ ràng
+* input có label
+* image có alt
+* màu chữ đủ tương phản
+* focus state rõ ràng
+* keyboard navigation cơ bản
+
+## 20. Output yêu cầu
+
+Hãy tạo TOÀN BỘ project hoàn chỉnh.
+
+Không chỉ đưa ra ví dụ.
+
+Phải cung cấp đầy đủ code cho:
+
+```text
+index.html
+products.html
+product-detail.html
+cart.html
+checkout.html
+
+css/style.css
+
+js/db.js
+js/app.js
+js/home.js
+js/products.js
+js/product-detail.js
+js/cart.js
+js/checkout.js
+```
+
+Code phải chạy được trực tiếp bằng Live Server.
+
+Không sử dụng placeholder kiểu:
+
+```js
+// add your code here
+// implement this
+// TODO
+```
+
+Tất cả function phải được implement hoàn chỉnh.
+
+Đảm bảo tất cả import/export đúng đường dẫn.
+
+Đảm bảo không có lỗi JavaScript khi mở từng page.
+
+Cuối cùng, cung cấp hướng dẫn ngắn gọn:
+
+1. Cách chạy project bằng VS Code + Live Server.
+2. Cách reset toàn bộ dữ liệu `localStorage`.
+3. Mô tả ngắn kiến trúc project.
+4. Liệt kê các tính năng đã hoàn thành.
+
+Ưu tiên chất lượng UI/UX và tính hoàn chỉnh của ứng dụng hơn việc viết code ngắn.

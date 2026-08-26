@@ -1,0 +1,231 @@
+:root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --primary: #f97316;
+    --primary-dark: #ea580c;
+    --success: #16a34a;
+    --error: #ef4444;
+    --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.nav-link {
+    position: relative;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #475569;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.7rem;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--primary);
+}
+
+.primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    font-weight: 700;
+    padding: 0.8rem 1.5rem;
+    box-shadow: 0 10px 20px rgba(249, 115, 22, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 24px rgba(249, 115, 22, 0.3);
+}
+
+.food-card {
+    overflow: hidden;
+    border-radius: 1.75rem;
+    border: 1px solid var(--border);
+    background: var(--card);
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.food-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 30px rgba(15, 23, 42, 0.08);
+}
+
+.category-tab {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: #fff;
+    color: #475569;
+    padding: 0.7rem 1rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.category-tab:hover,
+.category-tab.active {
+    border-color: rgba(249, 115, 22, 0.3);
+    background: #fff7ed;
+    color: var(--primary);
+}
+
+.quantity-button {
+    display: inline-flex;
+    height: 2rem;
+    width: 2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    transition: background 0.2s ease;
+}
+
+.quantity-button:hover {
+    background: #f8fafc;
+}
+
+.star-button {
+    border: none;
+    background: transparent;
+    font-size: 2rem;
+    color: #cbd5e1;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.star-button.active,
+.star-button:hover,
+.star-button:hover~.star-button {
+    color: #fbbf24;
+}
+
+.toast-container {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.toast {
+    min-width: 280px;
+    max-width: 360px;
+    border-radius: 1rem;
+    background: rgba(15, 23, 42, 0.96);
+    color: white;
+    padding: 0.9rem 1rem;
+    box-shadow: 0 18px 28px rgba(15, 23, 42, 0.16);
+    transform: translateY(12px);
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast.success {
+    background: rgba(22, 163, 74, 0.96);
+}
+
+.toast.error {
+    background: rgba(239, 68, 68, 0.96);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-icon {
+    display: inline-flex;
+    height: 1.5rem;
+    width: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.15);
+    font-weight: 700;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.45);
+    padding: 1rem;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    width: min(100%, 500px);
+}
+
+@media (max-width: 768px) {
+    .primary-button {
+        width: 100%;
+    }
+
+    .toast-container {
+        left: 1rem;
+        right: 1rem;
+    }
+
+    .toast {
+        min-width: 0;
+        max-width: none;
+    }
+}
