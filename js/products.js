@@ -2,6 +2,7 @@ import { categories, products } from "./db.js";
 import {
   addToCart,
   formatCurrency,
+  formatRating,
   getProductById,
   initializePage,
   showToast,
@@ -57,19 +58,19 @@ function buildProductCard(product) {
       </a>
       <div class="space-y-3 p-4">
         <a href="product-detail.html?id=${product.id}" class="block">
-          <p class="text-sm text-slate-500">${product.restaurant}</p>
-          <h3 class="mt-1 text-xl font-semibold text-slate-800">${product.name}</h3>
+          <p class="text-sm" style="color: #8c3d10;">${product.restaurant}</p>
+          <h3 class="mt-1 text-xl font-semibold" style="color: #5c2005;">${product.name}</h3>
         </a>
-        <div class="flex items-center gap-2 text-sm text-slate-600">
+        <div class="flex items-center gap-2 text-sm" style="color: #8c3d10;">
           <span class="text-yellow-400">★</span>
-          <span class="font-medium text-slate-700">${product.rating}</span>
+          <span class="font-medium" style="color: #5c2005;">${formatRating(product.rating)}</span>
           <span>(${product.reviewCount})</span>
         </div>
         <div class="flex items-center justify-between gap-3">
-          <span class="text-xl font-bold text-slate-900">${formatCurrency(product.price)}</span>
-          <span class="text-sm text-slate-500">${product.preparationTime} mins</span>
+          <span class="text-xl font-bold" style="color: #5c2005;">${formatCurrency(product.price)}</span>
+          <span class="text-sm" style="color: #8c3d10;">${product.preparationTime} phút</span>
         </div>
-        <button type="button" class="primary-button mt-2 w-full" data-add-to-cart="${product.id}">Add to Cart</button>
+        <button type="button" class="primary-button mt-2 w-full" data-add-to-cart="${product.id}">+</button>
       </div>
     </article>
   `;

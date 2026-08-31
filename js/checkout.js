@@ -2,6 +2,7 @@ import {
   clearCart,
   formatCurrency,
   getCart,
+  getItemFinalPrice,
   getOrders,
   initializePage,
   saveOrder,
@@ -11,7 +12,10 @@ import {
 function getCartSummary() {
   const cart = getCart();
   const subtotal = cart.reduce(
-    (sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0),
+    (sum, item) => {
+      const itemPrice = getItemFinalPrice(item);
+      return sum + Number(itemPrice) * Number(item.quantity || 0);
+    },
     0,
   );
   const deliveryFee = 15000;
@@ -44,18 +48,22 @@ function renderCheckoutSummary() {
 
   container.innerHTML = cart
     .map(
-      (item) => `
+      (item) => {
+        const itemPrice = getItemFinalPrice(item);
+        const selectedOption = item.selectedOption ? ` - ${item.selectedOption.name || item.selectedOption.id}` : '';
+        return `
         <div class="flex items-center gap-3 rounded-2xl bg-slate-50 p-3">
           <img src="${item.image}" alt="${item.name}" class="h-16 w-16 rounded-xl object-cover" />
           <div class="flex-1">
             <div class="flex items-center justify-between gap-3">
-              <h4 class="font-medium text-slate-800">${item.name}</h4>
-              <span class="text-sm font-semibold text-slate-900">${formatCurrency(item.price * item.quantity)}</span>
+              <h4 class="font-medium text-slate-800">${item.name}${selectedOption}</h4>
+              <span class="text-sm font-semibold text-slate-900">${formatCurrency(itemPrice * item.quantity)}</span>
             </div>
             <p class="mt-1 text-sm text-slate-500">Số lượng: ${item.quantity}</p>
           </div>
         </div>
-      `,
+      `;
+      },
     )
     .join("");
 

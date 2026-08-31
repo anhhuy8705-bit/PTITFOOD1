@@ -1,0 +1,167 @@
+[
+  {
+    "id": "com-tam-phuc-loc-tho",
+    "name": "Cơm tấm Phúc Lộc Thọ",
+    "area": "Le Van Viet",
+    "category": "com",
+    "price_range": {
+      "min": 20000,
+      "max": 50000
+    },
+    "status": "needs_verification"
+  },
+  {
+    "id": "com-tam-dem",
+    "name": "Cơm tấm Đêm",
+    "area": "Le Van Viet",
+    "category": "com",
+    "price_range": {
+      "min": 10000,
+      "max": 100000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "quan-com-que",
+    "name": "Quán Cơm Quê",
+    "area": "Duong Dinh Hoi",
+    "category": "com",
+    "price_range": {
+      "min": 30000,
+      "max": 50000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "com-tam-bun-mam-nem",
+    "name": "Cơm Tấm & Bún Mắm Nêm",
+    "area": "La Xuan Oai",
+    "category": "com",
+    "price_range": {
+      "min": 27000,
+      "max": 42000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "mi-cay-naga",
+    "name": "Mì Cay Naga",
+    "area": "Han Thuyen",
+    "category": "pho_bun",
+    "price_range": {
+      "min": 40000,
+      "max": 59000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "bun-quay-tam-quan",
+    "name": "Bún Quậy Tâm Quán",
+    "area": "Vo Van Ngan",
+    "category": "pho_bun",
+    "price_range": {
+      "min": 10000,
+      "max": 100000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "de-nhat-mi-keo",
+    "name": "Đệ Nhất Mì Kéo",
+    "area": "Thong Nhat",
+    "category": "pho_bun",
+    "price_range": {
+      "min": 35000,
+      "max": 80000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "lau-ga-3-vi",
+    "name": "Lẩu Gà 3 Vị",
+    "area": "Man Thien",
+    "category": "pho_bun",
+    "price_range": {
+      "min": 100000,
+      "max": 200000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "quynh-bun-dau-mam-tom",
+    "name": "Quỳnh Bún Đậu Mắm Tôm",
+    "area": "Dang Van Bi",
+    "category": "pho_bun",
+    "price_range": {
+      "min": 22000,
+      "max": 110000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "bun-bo-gia-han",
+    "name": "Bún Bò GIA HÂN",
+    "area": "Duong 36",
+    "category": "pho_bun",
+    "price_range": {
+      "min": 10000,
+      "max": 100000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "jollibee-vincom",
+    "name": "Jollibee Vincom",
+    "area": "Le Van Viet",
+    "category": "ga",
+    "price_range": {
+      "min": 30000,
+      "max": 179000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "tiem-ga-ran-bum-ggomi",
+    "name": "Tiệm Gà Rán Bum Ggomi",
+    "area": "Chu Manh Trinh",
+    "category": "ga",
+    "price_range": {
+      "min": 100000,
+      "max": 200000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "tra-sua-hokkaido",
+    "name": "Trà Sữa Hokkaido",
+    "area": "Duong Dinh Hoi",
+    "category": "do_uong",
+    "price_range": {
+      "min": 32000,
+      "max": 48000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "an-vat-nguyen-duy",
+    "name": "Ăn Vặt Nguyễn Duy",
+    "area": "Dan Chu",
+    "category": "an_vat",
+    "price_range": {
+      "min": 5000,
+      "max": 45000
+    },
+    "status": "confirmed"
+  },
+  {
+    "id": "an-vat-ngon-ngon-since-2015",
+    "name": "Ăn Vặt Ngon Ngon Since 2015",
+    "area": "Linh Xuan",
+    "category": "an_vat",
+    "price_range": {
+      "min": 5000,
+      "max": 220000
+    },
+    "status": "confirmed"
+  }
+]

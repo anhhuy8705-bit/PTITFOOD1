@@ -64,6 +64,23 @@ export function saveCart(cart) {
   }
 }
 
+export function getItemFinalPrice(item) {
+  if (!item) return 0;
+
+  if (item.selectedOption) {
+    const optionPrice = Number(
+      item.selectedOption.price ??
+        item.options?.find((option) => option.id === item.selectedOption.id)?.price ??
+        item.finalPrice ??
+        item.price ??
+        0,
+    );
+    return optionPrice || Number(item.finalPrice || item.price || 0);
+  }
+
+  return Number(item.finalPrice ?? item.price ?? 0);
+}
+
 export function addToCart(product, quantity = 1) {
   if (!product || quantity < 1) {
     showToast("Số lượng sản phẩm không hợp lệ.", "error");
@@ -71,38 +88,64 @@ export function addToCart(product, quantity = 1) {
   }
 
   const cart = getCart();
-  const existingItem = cart.find((item) => item.id === product.id);
+  const selectedOption = product.selectedOption
+    ? product.options?.find((option) => option.id === product.selectedOption.id) ?? product.selectedOption
+    : null;
+  const finalPrice = selectedOption
+    ? Number(selectedOption.price || 0)
+    : Number(product.price || 0);
+  const optionKey = selectedOption ? selectedOption.id : "default";
+
+  const existingItem = cart.find((item) => {
+    const itemOptionKey = item.selectedOption ? item.selectedOption.id : "default";
+    return item.id === product.id && itemOptionKey === optionKey;
+  });
 
   if (existingItem) {
     existingItem.quantity += quantity;
+    existingItem.finalPrice = finalPrice;
+    existingItem.selectedOption = selectedOption
+      ? { ...selectedOption }
+      : existingItem.selectedOption;
   } else {
-    cart.push({
+    const cartItem = {
       ...product,
       quantity,
-    });
+      selectedOption: selectedOption ? { ...selectedOption } : undefined,
+      finalPrice,
+    };
+
+    cart.push(cartItem);
   }
 
   saveCart(cart);
   showToast(`Đã thêm "${product.name}" vào giỏ hàng`, "success");
 }
 
-export function removeFromCart(productId) {
-  const cart = getCart().filter((item) => item.id !== productId);
+export function removeFromCart(productId, optionId = "default") {
+  const cart = getCart().filter((item) => {
+    const itemOptionId = item.selectedOption ? item.selectedOption.id : "default";
+    return !(item.id === productId && itemOptionId === optionId);
+  });
   saveCart(cart);
 }
 
-export function updateCartQuantity(productId, quantity) {
+export function updateCartQuantity(productId, quantity, optionId = "default") {
   if (quantity < 1) {
-    removeFromCart(productId);
+    removeFromCart(productId, optionId);
     return;
   }
 
   const cart = getCart();
-  const item = cart.find((entry) => entry.id === productId);
+  const item = cart.find((entry) => {
+    const entryOptionId = entry.selectedOption ? entry.selectedOption.id : "default";
+    return entry.id === productId && entryOptionId === optionId;
+  });
 
   if (!item) return;
 
   item.quantity = quantity;
+  item.finalPrice = getItemFinalPrice(item);
   saveCart(cart);
 }
 
@@ -174,6 +217,15 @@ export function getProductById(productId) {
 export function formatCurrency(price) {
   const amount = Number(price || 0);
   return `${amount.toLocaleString("vi-VN")} ₫`;
+}
+
+export function formatRating(value) {
+  const numeric = Number(value ?? 0);
+  if (!Number.isFinite(numeric)) {
+    return "0,0";
+  }
+
+  return numeric.toFixed(1).replace(".", ",");
 }
 
 export function calculateAverageRating(productId) {

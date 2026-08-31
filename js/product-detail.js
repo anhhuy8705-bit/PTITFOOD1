@@ -3,6 +3,7 @@ import {
   addToCart,
   calculateAverageRating,
   formatCurrency,
+  formatRating,
   getProductById,
   getReviews,
   initializePage,
@@ -111,20 +112,36 @@ function renderProductDetail() {
           <span class="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-orange-600">${product.category}</span>
         </div>
         <div>
-          <h1 class="text-3xl font-bold text-slate-900">${product.name}</h1>
-          <p class="mt-2 text-lg text-slate-500">${product.restaurant}</p>
+          <h1 class="text-3xl font-bold" style="color: #5c2005;">${product.name}</h1>
+          <p class="mt-2 text-lg" style="color: #8c3d10;">${product.restaurant}</p>
         </div>
         <div class="flex items-center gap-3">
           <div class="flex items-center gap-1 text-yellow-400 text-lg">${createStarRating(productRating)}</div>
-          <span class="text-sm font-medium text-slate-700">${productRating.toFixed(1)}</span>
-          <span class="text-sm text-slate-500">(${reviewCount} reviews)</span>
+          <span class="text-sm font-medium" style="color: #5c2005;">${formatRating(productRating)}</span>
+          <span class="text-sm" style="color: #8c3d10;">(${reviewCount} reviews)</span>
         </div>
-        <div class="text-3xl font-bold text-slate-900">${formatCurrency(product.price)}</div>
-        <p class="text-base leading-7 text-slate-600">${product.description}</p>
-        <div class="flex flex-wrap gap-4 text-sm text-slate-600">
+        <div id="detailPrice" class="text-3xl font-bold" style="color: #5c2005;">${formatCurrency(product.options?.[0]?.price ?? product.price)}</div>
+        <p class="text-base leading-7" style="color: #8c3d10;">${product.description}</p>
+        <div class="flex flex-wrap gap-4 text-sm" style="color: #8c3d10;">
           <span class="rounded-full bg-slate-100 px-3 py-2">⏱ ${product.preparationTime} phút</span>
           <span class="rounded-full bg-slate-100 px-3 py-2">📍 ${product.restaurant}</span>
         </div>
+        ${product.options && product.options.length > 0 ? `
+        <div class="space-y-3">
+          <label class="block font-semibold" style="color: #5c2005;">Lựa chọn:</label>
+          <div class="flex flex-wrap gap-2">
+            ${product.options.map((option, idx) => {
+              const priceLabel = option.price > 0 ? `(${formatCurrency(option.price)})` : '(Không phụ thu)';
+              return `
+              <label class="flex items-center gap-2 cursor-pointer rounded-full border-2 px-4 py-2 transition" style="border-color: ${idx === 0 ? '#c2571a' : '#d99a74'}; background-color: ${idx === 0 ? '#fae5d8' : 'transparent'};">
+                <input type="radio" name="product-option" value="${option.id}" data-option-price="${option.price}" data-option-name="${option.name}" ${idx === 0 ? 'checked' : ''} class="product-option-input" />
+                <span style="color: #7d3715;">${option.name} ${priceLabel}</span>
+              </label>
+            `;
+            }).join('')}
+          </div>
+        </div>
+        ` : ''}
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-2">
             <button type="button" class="quantity-button" data-quantity-action="decrease" aria-label="Giảm số lượng">−</button>
@@ -138,7 +155,28 @@ function renderProductDetail() {
   `;
 
   const detailQuantity = document.getElementById("detailQuantity");
+  const detailPrice = document.getElementById("detailPrice");
   let quantity = 1;
+  let selectedOption = null;
+
+  const getSelectedOption = () => {
+    const checkedInput = document.querySelector(".product-option-input:checked");
+    if (!checkedInput) return null;
+
+    return {
+      id: checkedInput.value,
+      name: checkedInput.dataset.optionName || checkedInput.value,
+      price: Number(checkedInput.dataset.optionPrice || 0),
+    };
+  };
+
+  const updateDisplayedPrice = () => {
+    const currentOption = getSelectedOption();
+    const priceToDisplay = currentOption ? currentOption.price : Number(product.price || 0);
+    if (detailPrice) {
+      detailPrice.textContent = formatCurrency(priceToDisplay);
+    }
+  };
 
   document.querySelectorAll("[data-quantity-action]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -149,8 +187,26 @@ function renderProductDetail() {
     });
   });
 
+  document.querySelectorAll(".product-option-input").forEach((input) => {
+    input.addEventListener("change", () => {
+      selectedOption = getSelectedOption();
+      updateDisplayedPrice();
+    });
+  });
+
+  selectedOption = getSelectedOption();
+  updateDisplayedPrice();
+
   document.getElementById("detailAddToCart")?.addEventListener("click", () => {
-    addToCart(product, quantity);
+    const cartItem = { ...product, quantity };
+    const currentOption = getSelectedOption();
+    if (currentOption) {
+      cartItem.selectedOption = currentOption;
+      cartItem.finalPrice = currentOption.price;
+    } else {
+      cartItem.finalPrice = product.price;
+    }
+    addToCart(cartItem, quantity);
   });
 
   renderReviews(product.id);

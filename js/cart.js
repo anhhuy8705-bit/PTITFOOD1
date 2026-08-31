@@ -3,6 +3,7 @@ import {
   clearCart,
   formatCurrency,
   getCart,
+  getItemFinalPrice,
   getProductById,
   initializePage,
   removeFromCart,
@@ -13,8 +14,10 @@ import {
 
 function getCartSubtotal(cart) {
   return cart.reduce(
-    (total, item) =>
-      total + Number(item.price || 0) * Number(item.quantity || 0),
+    (total, item) => {
+      const itemPrice = getItemFinalPrice(item);
+      return total + Number(itemPrice) * Number(item.quantity || 0);
+    },
     0,
   );
 }
@@ -51,18 +54,18 @@ function renderCart() {
           <div class="flex-1">
             <div class="flex items-start justify-between gap-3">
               <div>
-                <h3 class="text-lg font-semibold text-slate-900">${item.name}</h3>
+                <h3 class="text-lg font-semibold text-slate-900">${item.name}${item.selectedOption ? ` - ${item.selectedOption.name || item.selectedOption.id}` : ''}</h3>
                 <p class="text-sm text-slate-500">${item.restaurant || "Foodie Kitchen"}</p>
               </div>
-              <button type="button" class="remove-item text-sm font-medium text-red-500" data-remove-id="${item.id}">Xóa</button>
+              <button type="button" class="remove-item text-sm font-medium text-red-500" data-remove-id="${item.id}" data-remove-option="${item.selectedOption ? item.selectedOption.id : "default"}">Xóa</button>
             </div>
             <div class="mt-4 flex items-center justify-between gap-4">
               <div class="flex items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-2 py-1.5">
-                <button type="button" class="quantity-button" data-quantity-id="${item.id}" data-quantity-action="decrease" aria-label="Giảm số lượng">−</button>
+                <button type="button" class="quantity-button" data-quantity-id="${item.id}" data-quantity-option="${item.selectedOption ? item.selectedOption.id : "default"}" data-quantity-action="decrease" aria-label="Giảm số lượng">−</button>
                 <span class="min-w-6 text-center text-base font-semibold text-slate-800">${item.quantity}</span>
-                <button type="button" class="quantity-button" data-quantity-id="${item.id}" data-quantity-action="increase" aria-label="Tăng số lượng">+</button>
+                <button type="button" class="quantity-button" data-quantity-id="${item.id}" data-quantity-option="${item.selectedOption ? item.selectedOption.id : "default"}" data-quantity-action="increase" aria-label="Tăng số lượng">+</button>
               </div>
-              <span class="text-lg font-bold text-slate-900">${formatCurrency(item.price * item.quantity)}</span>
+              <span class="text-lg font-bold text-slate-900">${formatCurrency(getItemFinalPrice(item) * item.quantity)}</span>
             </div>
           </div>
         </article>
@@ -104,7 +107,7 @@ function renderCart() {
   const removeButtons = cartPage.querySelectorAll("[data-remove-id]");
   removeButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      removeFromCart(button.dataset.removeId);
+      removeFromCart(button.dataset.removeId, button.dataset.removeOption || "default");
       renderCart();
     });
   });
@@ -113,14 +116,18 @@ function renderCart() {
   qtyButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const productId = button.dataset.quantityId;
-      const currentItem = getCart().find((item) => item.id === productId);
+      const optionId = button.dataset.quantityOption || "default";
+      const currentItem = getCart().find((item) => {
+        const itemOptionId = item.selectedOption ? item.selectedOption.id : "default";
+        return item.id === productId && itemOptionId === optionId;
+      });
       if (!currentItem) return;
 
       const nextQuantity =
         button.dataset.quantityAction === "increase"
           ? currentItem.quantity + 1
           : currentItem.quantity - 1;
-      updateCartQuantity(productId, nextQuantity);
+      updateCartQuantity(productId, nextQuantity, optionId);
       renderCart();
     });
   });

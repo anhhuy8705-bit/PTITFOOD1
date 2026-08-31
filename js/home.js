@@ -2,6 +2,7 @@ import { categories, products } from "./db.js";
 import {
   addToCart,
   formatCurrency,
+  formatRating,
   initializePage,
   getProductById,
 } from "./app.js";
@@ -71,19 +72,19 @@ function renderFeaturedProducts(selectedCategory = "Tất cả") {
           <div class="space-y-3 p-4">
             <div class="flex items-start justify-between gap-3">
               <a href="product-detail.html?id=${product.id}" class="block flex-1">
-                <h3 class="text-lg font-semibold text-slate-800">${product.name}</h3>
-                <p class="text-sm text-slate-500">${product.restaurant}</p>
+                <h3 class="text-lg font-semibold" style="color: #c47d5a;">${product.name}</h3>
+                <p class="text-sm" style="color: #d99b79;">${product.restaurant}</p>
               </a>
-              <span class="rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-600">${product.category}</span>
+              <span class="rounded-full bg-orange-50 px-2 py-1 text-xs font-medium" style="color: #a84515;">${product.category}</span>
             </div>
-            <div class="flex items-center gap-2 text-sm text-slate-600">
+            <div class="flex items-center gap-2 text-sm" style="color: #d99b79;">
               <span class="text-yellow-400">★</span>
-              <span class="font-medium text-slate-700">${product.rating}</span>
+              <span class="font-medium" style="color: #c47d5a;">${formatRating(product.rating)}</span>
               <span>(${product.reviewCount} reviews)</span>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-xl font-bold text-slate-900">${formatCurrency(product.price)}</span>
-              <button type="button" class="primary-button" data-add-to-cart="${product.id}">Thêm</button>
+              <span class="text-xl font-bold" style="color: #ffffff;">${formatCurrency(product.price)}</span>
+              <button type="button" class="primary-button" data-add-to-cart="${product.id}">+</button>
             </div>
           </div>
         </article>
