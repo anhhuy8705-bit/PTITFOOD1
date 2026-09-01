@@ -10,155 +10,11 @@ export const categories = [
 
 const restaurants = [
   {
-    id: "com-tam-phuc-loc-tho",
-    name: "Cơm tấm Phúc Lộc Thọ",
-    area: "Le Van Viet",
+    id: "quan-com-co-thanh",
+    name: "Quán Cơm Cô Thanh",
+    area: "H3 Man Thiện, Khu phố 1, Tăng Nhơn Phú, TP.HCM",
     category: "com",
-    price_range: { min: 20000, max: 50000 },
-    status: "needs_verification",
-  },
-  {
-    id: "com-tam-dem",
-    name: "Cơm tấm Đêm",
-    area: "Le Van Viet",
-    category: "com",
-    price_range: { min: 10000, max: 100000 },
-    status: "confirmed",
-  },
-  {
-    id: "quan-com-que",
-    name: "Quán Cơm Quê",
-    area: "Duong Dinh Hoi",
-    category: "com",
-    price_range: { min: 30000, max: 50000 },
-    status: "confirmed",
-  },
-  {
-    id: "com-tam-bun-mam-nem",
-    name: "Cơm Tấm & Bún Mắm Nêm",
-    area: "La Xuan Oai",
-    category: "com",
-    price_range: { min: 27000, max: 42000 },
-    status: "confirmed",
-  },
-  {
-    id: "mi-cay-naga",
-    name: "Mì Cay Naga",
-    area: "Han Thuyen",
-    category: "pho_bun",
-    price_range: { min: 40000, max: 59000 },
-    status: "confirmed",
-  },
-  {
-    id: "bun-quay-tam-quan",
-    name: "Bún Quậy Tâm Quán",
-    area: "Vo Van Ngan",
-    category: "pho_bun",
-    price_range: { min: 10000, max: 100000 },
-    status: "confirmed",
-  },
-  {
-    id: "de-nhat-mi-keo",
-    name: "Đệ Nhất Mì Kéo",
-    area: "Thong Nhat",
-    category: "pho_bun",
-    price_range: { min: 35000, max: 80000 },
-    status: "confirmed",
-  },
-  {
-    id: "lau-ga-3-vi",
-    name: "Lẩu Gà 3 Vị",
-    area: "Man Thien",
-    category: "pho_bun",
-    price_range: { min: 100000, max: 200000 },
-    status: "confirmed",
-  },
-  {
-    id: "quynh-bun-dau-mam-tom",
-    name: "Quỳnh Bún Đậu Mắm Tôm",
-    area: "Dang Van Bi",
-    category: "pho_bun",
-    price_range: { min: 22000, max: 110000 },
-    status: "confirmed",
-  },
-  {
-    id: "bun-bo-gia-han",
-    name: "Bún Bò Gia Hân",
-    area: "Duong 36",
-    category: "pho_bun",
-    price_range: { min: 10000, max: 100000 },
-    status: "confirmed",
-  },
-  {
-    id: "jollibee-vincom",
-    name: "Jollibee Vincom",
-    area: "Le Van Viet",
-    category: "ga",
-    price_range: { min: 30000, max: 179000 },
-    status: "confirmed",
-  },
-  {
-    id: "tiem-ga-ran-bum-ggomi",
-    name: "Tiệm Gà Rán Bum Ggomi",
-    area: "Chu Manh Trinh",
-    category: "ga",
-    price_range: { min: 100000, max: 200000 },
-    status: "confirmed",
-  },
-  {
-    id: "tra-sua-hokkaido",
-    name: "Trà Sữa Hokkaido",
-    area: "Duong Dinh Hoi",
-    category: "do_uong",
-    price_range: { min: 32000, max: 48000 },
-    status: "confirmed",
-  },
-  {
-    id: "an-vat-nguyen-duy",
-    name: "Ăn Vặt Nguyễn Duy",
-    area: "Dan Chu",
-    category: "an_vat",
-    price_range: { min: 5000, max: 45000 },
-    status: "confirmed",
-  },
-  {
-    id: "an-vat-ngon-ngon-since-2015",
-    name: "Ăn Vặt Ngon Ngon Since 2015",
-    area: "Linh Xuan",
-    category: "an_vat",
-    price_range: { min: 5000, max: 220000 },
-    status: "confirmed",
-  },
-  {
-    id: "bo-ne-hem-2",
-    name: "Bò Né Hẻm 2",
-    area: "171 Ngô Quyền, Tăng Nhơn Phú, TP.HCM",
-    category: "banh_mi",
-    price_range: { min: 4000, max: 40000 },
-    status: "confirmed",
-  },
-  {
-    id: "com-tam-ngo-quyen-thu-duc",
-    name: "Cơm tấm Ngô Quyền Thủ Đức",
-    area: "Ngô Quyền, TP. Thủ Đức, TP.HCM",
-    category: "com",
-    price_range: { min: 30000, max: 40000 },
-    status: "confirmed",
-  },
-  {
-    id: "hu-tieu-muc-cho-lach",
-    name: "Hủ Tiếu Mực Chợ Lách",
-    area: "462 Đ. Lê Văn Việt, Tăng Nhơn Phú, TP.HCM",
-    category: "pho_bun",
-    price_range: { min: 30000, max: 40000 },
-    status: "confirmed",
-  },
-  {
-    id: "pho-tuan-ha-noi",
-    name: "Phở Tuấn Hà Nội",
-    area: "Tăng Nhơn Phú, TP. Thủ Đức, TP.HCM",
-    category: "pho_bun",
-    price_range: { min: 5000, max: 40000 },
+    price_range: { min: 25000, max: 30000 },
     status: "confirmed",
   },
   {
@@ -170,11 +26,35 @@ const restaurants = [
     status: "confirmed",
   },
   {
-    id: "quan-com-co-thanh",
-    name: "Quán Cơm Cô Thanh",
-    area: "H3 Man Thiện, Khu phố 1, Tăng Nhơn Phú, TP.HCM",
+    id: "pho-tuan-ha-noi",
+    name: "Phở Tuấn Hà Nội",
+    area: "Tăng Nhơn Phú, TP. Thủ Đức, TP.HCM",
+    category: "pho_bun",
+    price_range: { min: 5000, max: 40000 },
+    status: "confirmed",
+  },
+  {
+    id: "hu-tieu-muc-cho-lach",
+    name: "Hủ Tiếu Mực Chợ Lách",
+    area: "462 Đ. Lê Văn Việt, Tăng Nhơn Phú, TP.HCM",
+    category: "pho_bun",
+    price_range: { min: 30000, max: 40000 },
+    status: "confirmed",
+  },
+  {
+    id: "com-tam-ngo-quyen-thu-duc",
+    name: "Cơm tấm Ngô Quyền Thủ Đức",
+    area: "Ngô Quyền, TP. Thủ Đức, TP.HCM",
     category: "com",
-    price_range: { min: 25000, max: 30000 },
+    price_range: { min: 30000, max: 40000 },
+    status: "confirmed",
+  },
+  {
+    id: "bo-ne-hem-2",
+    name: "Bò Né Hẻm 2",
+    area: "171 Ngô Quyền, Tăng Nhơn Phú, TP.HCM",
+    category: "banh_mi",
+    price_range: { min: 4000, max: 40000 },
     status: "confirmed",
   },
 ];
@@ -188,23 +68,69 @@ const categoryMap = {
   banh_mi: "Bánh mì",
 };
 
-const productImages = [
-  "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=900&q=80",
+const menuImageSequence = [
   "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1557872943-16a5ac26437e?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1586511934875-5c5411eebf79?auto=format&fit=crop&w=900&q=80",
   "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1497636577773-f1231844b336?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=900&q=80",
 ];
+
+const categoryImageSets = {
+  com: [
+    "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=900&q=80",
+  ],
+  pho_bun: [
+    "https://images.unsplash.com/photo-1557872943-16a5ac26437e?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1526318896980-cf78c088247c?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80",
+  ],
+  ga: [
+    "https://images.unsplash.com/photo-1606728035253-49e8a23146de?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1562967916-eb82221dfb92?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=900&q=80",
+  ],
+  do_uong: [
+    "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=900&q=80",
+  ],
+  an_vat: [
+    "https://images.unsplash.com/photo-1586511934875-5c5411eebf79?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=900&q=80",
+  ],
+  banh_mi: [
+    "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80",
+  ],
+};
 
 export const products = restaurants.map((restaurant, index) => {
   const category = categoryMap[restaurant.category] || "Cơm";
+  const imagePool = categoryImageSets[restaurant.category] || categoryImageSets.com;
   const minPrice = Number(restaurant.price_range?.min ?? 20000);
   const maxPrice = Number(restaurant.price_range?.max ?? 50000);
   const price = Math.round((minPrice + maxPrice) / 2);
@@ -370,12 +296,14 @@ export const products = restaurants.map((restaurant, index) => {
     options = [{ id: "mac-dinh", name: "Mặc định", price: 0 }];
   }
 
+  const normalizedPrice = options[0]?.price ?? price;
+
   return {
     id: restaurant.id,
     name: restaurant.name,
     description: `${restaurant.name} ở ${restaurant.area} phục vụ món ${category.toLowerCase()} với mức giá phù hợp và phong cách ăn nhanh, tiện lợi cho sinh viên và người làm việc.`,
-    price,
-    image: productImages[index % productImages.length],
+    price: normalizedPrice,
+    image: menuImageSequence[index % menuImageSequence.length],
     category,
     rating:
       restaurant.status === "confirmed"
@@ -383,7 +311,7 @@ export const products = restaurants.map((restaurant, index) => {
         : 4.4,
     reviewCount: 30 + index * 18,
     restaurant: restaurant.area,
-    preparationTime: 15 + (index % 6) * 5,
+    preparationTime: 18 + (index % 3),
     options,
   };
 });

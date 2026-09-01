@@ -47,30 +47,47 @@ function getFilteredProducts() {
   return filtered;
 }
 
+const accentPalette = {
+  Cơm: { accent: "#f59e0b", soft: "rgba(245, 158, 11, 0.12)" },
+  "Phở/Bún": { accent: "#fb7185", soft: "rgba(251, 113, 133, 0.12)" },
+  "Bánh mì": { accent: "#34d399", soft: "rgba(52, 211, 153, 0.12)" },
+  Gà: { accent: "#f97316", soft: "rgba(249, 115, 22, 0.12)" },
+  "Đồ uống": { accent: "#38bdf8", soft: "rgba(56, 189, 248, 0.12)" },
+  "Ăn vặt": { accent: "#a78bfa", soft: "rgba(167, 139, 250, 0.12)" },
+};
+
 function buildProductCard(product) {
+  const accent = accentPalette[product.category] || accentPalette["Cơm"];
+
   return `
-    <article class="food-card group">
+    <article class="food-card group" style="--card-accent: ${accent.accent}; --card-accent-soft: ${accent.soft};">
       <a href="product-detail.html?id=${product.id}" class="block">
-        <div class="relative overflow-hidden rounded-2xl">
-          <img src="${product.image}" alt="${product.name}" class="h-52 w-full object-cover transition duration-300 group-hover:scale-105" />
-          <span class="absolute left-3 top-3 rounded-full bg-white/90 px-2 py-1 text-xs font-medium text-slate-700">${product.category}</span>
+        <div class="relative overflow-hidden rounded-[1.5rem] bg-[#1e1715] shadow-[0_10px_18px_rgba(120,70,43,0.12)]">
+          <img src="${product.image}" alt="${product.name}" class="h-48 w-full rounded-[1.5rem] object-cover object-center scale-[1.08] transition duration-300 active:scale-[1.12] active:rotate-[-0.5deg] sm:h-52" />
+          <span class="card-accent-tag absolute left-4 top-4">${product.category}</span>
         </div>
       </a>
       <div class="space-y-3 p-4">
+        <div class="flex items-center justify-between gap-2 text-sm" style="color: #d99b79;">
+          <span class="inline-flex items-center gap-1 text-yellow-400">
+            <span>★</span>
+            <span class="font-semibold" style="color: #f8d78d;">${formatRating(product.rating)}</span>
+          </span>
+          <span>(${product.reviewCount} đánh giá)</span>
+        </div>
         <a href="product-detail.html?id=${product.id}" class="block">
-          <p class="text-sm" style="color: #8c3d10;">${product.restaurant}</p>
-          <h3 class="mt-1 text-xl font-semibold" style="color: #5c2005;">${product.name}</h3>
+          <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Restaurant</p>
+          <h3 class="mt-1 text-lg font-bold" style="color: #ffefe2;">${product.name}</h3>
+          <p class="mt-1 text-sm" style="color: #d7aa88;">📍 ${product.restaurant}</p>
         </a>
-        <div class="flex items-center gap-2 text-sm" style="color: #8c3d10;">
-          <span class="text-yellow-400">★</span>
-          <span class="font-medium" style="color: #5c2005;">${formatRating(product.rating)}</span>
-          <span>(${product.reviewCount})</span>
+        <div class="card-extra-info">
+          <div class="text-lg font-black" style="color: #fff;">${formatCurrency(product.price)}</div>
+          <div class="card-time-box">
+            <div class="text-[10px] font-bold uppercase tracking-[0.16em]">Giao</div>
+            <div class="mt-1 text-base font-black">${product.preparationTime} phút</div>
+          </div>
         </div>
-        <div class="flex items-center justify-between gap-3">
-          <span class="text-xl font-bold" style="color: #5c2005;">${formatCurrency(product.price)}</span>
-          <span class="text-sm" style="color: #8c3d10;">${product.preparationTime} phút</span>
-        </div>
-        <button type="button" class="primary-button mt-2 w-full" data-add-to-cart="${product.id}">+</button>
+        <button type="button" class="primary-button mt-1 w-full" data-add-to-cart="${product.id}">Đặt món</button>
       </div>
     </article>
   `;
