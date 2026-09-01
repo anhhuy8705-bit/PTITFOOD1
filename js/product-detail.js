@@ -43,18 +43,18 @@ function renderReviews(productId) {
   reviewList.innerHTML = reviews
     .map(
       (review) => `
-        <article class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div class="flex items-start gap-4">
-            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 font-semibold text-orange-600">
+        <article class="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:rounded-3xl sm:p-5">
+          <div class="flex items-start gap-3 sm:gap-4">
+            <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-sm font-semibold text-orange-600 sm:h-12 sm:w-12">
               ${review.userName.charAt(0).toUpperCase()}
             </div>
-            <div class="flex-1">
-              <div class="flex items-center justify-between gap-3">
-                <h4 class="font-semibold text-slate-800">${review.userName}</h4>
-                <span class="text-sm text-slate-400">${review.date}</span>
+            <div class="flex-1 min-w-0">
+              <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+                <h4 class="font-semibold text-slate-800 text-sm sm:text-base">${review.userName}</h4>
+                <span class="text-xs text-slate-400 sm:text-sm">${review.date}</span>
               </div>
-              <div class="mt-2 text-yellow-400">${createStarRating(review.rating)}</div>
-              <p class="mt-3 text-sm leading-6 text-slate-600">${review.comment}</p>
+              <div class="mt-2 text-yellow-400 text-sm sm:text-base">${createStarRating(review.rating)}</div>
+              <p class="mt-2 text-xs leading-5 text-slate-600 sm:mt-3 sm:text-sm sm:leading-6">${review.comment}</p>
             </div>
           </div>
         </article>
@@ -129,13 +129,13 @@ function renderProductDetail() {
         ${product.options && product.options.length > 0 ? `
         <div class="space-y-3">
           <label class="block font-semibold" style="color: #5c2005;">Lựa chọn:</label>
-          <div class="flex flex-wrap gap-2">
+          <div class="option-group flex flex-wrap gap-2">
             ${product.options.map((option, idx) => {
               const priceLabel = option.price > 0 ? `(${formatCurrency(option.price)})` : '(Không phụ thu)';
               return `
-              <label class="flex items-center gap-2 cursor-pointer rounded-full border-2 px-4 py-2 transition" style="border-color: ${idx === 0 ? '#c2571a' : '#d99a74'}; background-color: ${idx === 0 ? '#fae5d8' : 'transparent'};">
+              <label class="option-label flex items-center gap-2 cursor-pointer rounded-2xl border-2 px-3 py-2 transition sm:px-4 sm:py-2" style="border-color: #d99a74; background-color: transparent;">
                 <input type="radio" name="product-option" value="${option.id}" data-option-price="${option.price}" data-option-name="${option.name}" ${idx === 0 ? 'checked' : ''} class="product-option-input" />
-                <span style="color: #7d3715;">${option.name} ${priceLabel}</span>
+                <span style="color: #7d3715; font-size: 0.875rem;">${option.name} ${priceLabel}</span>
               </label>
             `;
             }).join('')}

@@ -50,10 +50,12 @@ function getFilteredProducts() {
 const accentPalette = {
   Cơm: { accent: "#f59e0b", soft: "rgba(245, 158, 11, 0.12)" },
   "Phở/Bún": { accent: "#fb7185", soft: "rgba(251, 113, 133, 0.12)" },
+  "Mì/miến": { accent: "#f97316", soft: "rgba(249, 115, 22, 0.12)" },
   "Bánh mì": { accent: "#34d399", soft: "rgba(52, 211, 153, 0.12)" },
-  Gà: { accent: "#f97316", soft: "rgba(249, 115, 22, 0.12)" },
+  Gà: { accent: "#f59e0b", soft: "rgba(245, 158, 11, 0.12)" },
   "Đồ uống": { accent: "#38bdf8", soft: "rgba(56, 189, 248, 0.12)" },
   "Ăn vặt": { accent: "#a78bfa", soft: "rgba(167, 139, 250, 0.12)" },
+  "Món đặc biệt": { accent: "#f43f5e", soft: "rgba(244, 63, 94, 0.12)" },
 };
 
 function buildProductCard(product) {

@@ -18,11 +18,32 @@ function getCartSummary() {
     },
     0,
   );
-  const deliveryFee = 15000;
+  const deliveryFee = 10000;
   const discount = 0;
   const total = subtotal + deliveryFee - discount;
 
   return { cart, subtotal, deliveryFee, discount, total };
+}
+
+let paymentSelectionState = document.querySelector('input[name="paymentMethod"]:checked')?.value || "Cash on Delivery";
+
+function updatePaymentOptionStyles() {
+  document.querySelectorAll(".payment-option").forEach((label) => {
+    const input = label.querySelector('input[name="paymentMethod"]');
+    const isSelected = input && input.value === paymentSelectionState && input.checked;
+
+    label.classList.toggle("bg-[#3d261d]", isSelected);
+    label.classList.toggle("border-[#d5a968]", isSelected);
+    label.classList.toggle("shadow-[0_0_0_1px_rgba(213,169,104,0.15)]", isSelected);
+
+    const text = label.querySelector(".payment-label-text");
+    if (text) {
+      text.classList.toggle("text-[#f0c777]", isSelected);
+      text.classList.toggle("font-black", isSelected);
+      text.classList.toggle("font-bold", !isSelected);
+      text.classList.toggle("text-[#d5a968]", !isSelected);
+    }
+  });
 }
 
 function renderCheckoutSummary() {
@@ -34,7 +55,7 @@ function renderCheckoutSummary() {
   if (!cart.length) {
     container.innerHTML = `
       <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
-        <p class="text-slate-500">Giỏ hàng đang trống. Hãy thêm món trước khi thanh toán.</p>
+        <p class="text-[#f7e3cc] font-semibold">Giỏ hàng đang trống. Hãy thêm món trước khi thanh toán.</p>
       </div>
     `;
     document.getElementById("summarySubtotal").textContent = formatCurrency(0);
@@ -56,10 +77,10 @@ function renderCheckoutSummary() {
           <img src="${item.image}" alt="${item.name}" class="h-16 w-16 rounded-xl object-cover" />
           <div class="flex-1">
             <div class="flex items-center justify-between gap-3">
-              <h4 class="font-medium text-slate-800">${item.name}${selectedOption}</h4>
-              <span class="text-sm font-semibold text-slate-900">${formatCurrency(itemPrice * item.quantity)}</span>
+              <h4 class="font-extrabold text-[#f9efe5]">${item.name}${selectedOption}</h4>
+              <span class="text-sm font-extrabold text-[#f9efe5]">${formatCurrency(itemPrice * item.quantity)}</span>
             </div>
-            <p class="mt-1 text-sm text-slate-500">Số lượng: ${item.quantity}</p>
+            <p class="mt-1 text-sm font-medium text-[#efcfa5]">Số lượng: ${item.quantity}</p>
           </div>
         </div>
       `;
@@ -132,6 +153,15 @@ function handleCheckoutSubmit(event) {
 
 initializePage();
 renderCheckoutSummary();
+updatePaymentOptionStyles();
+
+document.querySelectorAll('input[name="paymentMethod"]').forEach((input) => {
+  input.addEventListener("change", (event) => {
+    const nextValue = event.target.value;
+    paymentSelectionState = nextValue;
+    updatePaymentOptionStyles();
+  });
+});
 
 document
   .getElementById("checkoutForm")

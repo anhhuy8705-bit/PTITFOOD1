@@ -2,10 +2,12 @@ export const categories = [
   "Tất cả",
   "Cơm",
   "Phở/Bún",
+  "Mì/miến",
   "Bánh mì",
   "Gà",
   "Đồ uống",
   "Ăn vặt",
+  "Món đặc biệt",
 ];
 
 const restaurants = [
