@@ -5,6 +5,8 @@ import {
   formatCurrency,
   formatRating,
   getProductById,
+  awardPhotoReviewPcoins,
+  getOrders,
   getReviews,
   initializePage,
   saveReview,
@@ -55,6 +57,7 @@ function renderReviews(productId) {
               </div>
               <div class="mt-2 text-yellow-400 text-sm sm:text-base">${createStarRating(review.rating)}</div>
               <p class="mt-2 text-xs leading-5 text-slate-600 sm:mt-3 sm:text-sm sm:leading-6">${review.comment}</p>
+              ${review.photo ? `<img class="review-photo" src="${review.photo}" alt="Ảnh món ăn do ${review.userName} gửi" loading="lazy" />` : ""}
             </div>
           </div>
         </article>
@@ -217,8 +220,12 @@ function setupReviewForm(productId) {
   const form = document.getElementById("reviewForm");
   const stars = document.querySelectorAll("[data-rating-star]");
   const hiddenRating = document.getElementById("reviewRating");
+  const photoInput = document.getElementById("reviewPhoto");
+  const photoPreview = document.getElementById("reviewPhotoPreview");
 
   if (!form || !hiddenRating) return;
+  if (form.dataset.reviewFormBound === "true") return;
+  form.dataset.reviewFormBound = "true";
 
   stars.forEach((star) => {
     star.addEventListener("click", () => {
@@ -233,7 +240,24 @@ function setupReviewForm(productId) {
     });
   });
 
-  form.addEventListener("submit", (event) => {
+  photoInput?.addEventListener("change", () => {
+    const file = photoInput.files?.[0];
+    if (!file) {
+      photoPreview.hidden = true;
+      photoPreview.removeAttribute("src");
+      return;
+    }
+    if (!file.type.startsWith("image/") || file.size > 8 * 1024 * 1024) {
+      showToast("Vui lòng chọn ảnh dưới 8 MB.", "error");
+      photoInput.value = "";
+      photoPreview.hidden = true;
+      return;
+    }
+    photoPreview.src = URL.createObjectURL(file);
+    photoPreview.hidden = false;
+  });
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const comment = document.getElementById("reviewComment")?.value.trim();
     const rating = Number(hiddenRating.value);
@@ -248,22 +272,77 @@ function setupReviewForm(productId) {
       return;
     }
 
+    let photo = "";
+    const photoFile = photoInput?.files?.[0];
+    if (photoFile) {
+      try {
+        photo = await compressReviewPhoto(photoFile);
+      } catch (error) {
+        showToast("Không thể xử lý ảnh đánh giá này.", "error");
+        return;
+      }
+    }
+
     const newReview = {
       id: `r-${Date.now()}`,
       productId,
       userName: "Bạn",
       rating,
       comment,
+      photo,
       date: new Date().toISOString().slice(0, 10),
     };
 
     saveReview(newReview);
+    let reviewReward = { amount: 0, reason: "" };
+    if (photo) {
+      reviewReward = awardPhotoReviewPcoins(newReview);
+    }
     form.reset();
+    if (photoPreview) {
+      photoPreview.hidden = true;
+      photoPreview.removeAttribute("src");
+    }
     hiddenRating.value = "";
     stars.forEach((star) => star.classList.remove("active"));
     renderReviews(productId);
     renderProductDetail();
-    showToast("Cảm ơn bạn đã đánh giá món ăn.", "success");
+    if (reviewReward.amount) {
+      showToast(`Cảm ơn bạn! +${reviewReward.amount.toLocaleString("vi-VN")} P-Coin từ ảnh đánh giá.`, "success");
+    } else if (photo && !getOrders().length) {
+      showToast("Đánh giá đã đăng. Điểm ảnh được cộng sau khi có đơn hàng đầu tiên.", "success");
+    } else if (reviewReward.reason) {
+      showToast(`Đánh giá đã đăng. ${reviewReward.reason}`, "success");
+    } else {
+      showToast("Cảm ơn bạn đã đánh giá món ăn.", "success");
+    }
+  });
+}
+
+function compressReviewPhoto(file) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    const sourceUrl = URL.createObjectURL(file);
+    image.onload = () => {
+      const scale = Math.min(1, 900 / Math.max(image.width, image.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(image.width * scale);
+      canvas.height = Math.round(image.height * scale);
+      const context = canvas.getContext("2d");
+      if (!context) {
+        URL.revokeObjectURL(sourceUrl);
+        reject(new Error("Canvas unavailable"));
+        return;
+      }
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(sourceUrl);
+      resolve(canvas.toDataURL("image/jpeg", 0.68));
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(sourceUrl);
+      reject(new Error("Invalid image"));
+    };
+    image.src = sourceUrl;
   });
 }
 

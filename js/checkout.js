@@ -4,7 +4,12 @@ import {
   getCart,
   getItemFinalPrice,
   getOrders,
+  getPcoinOrderReward,
+  getPcoinRedemptionLimit,
+  getPcoinWallet,
   initializePage,
+  awardOrderPcoins,
+  redeemPcoins,
   saveOrder,
   showToast,
 } from "./app.js";
@@ -20,9 +25,13 @@ function getCartSummary() {
   );
   const deliveryFee = 10000;
   const discount = 0;
-  const total = subtotal + deliveryFee - discount;
+  const maxPcoinUse = getPcoinRedemptionLimit(subtotal + deliveryFee - discount);
+  const pcoinInput = document.getElementById("pcoinToUse");
+  const requestedPcoins = Math.max(0, Math.floor(Number(pcoinInput?.value) || 0));
+  const pcoinUsed = Math.min(requestedPcoins, maxPcoinUse);
+  const total = subtotal + deliveryFee - discount - pcoinUsed;
 
-  return { cart, subtotal, deliveryFee, discount, total };
+  return { cart, subtotal, deliveryFee, discount, total, pcoinUsed, maxPcoinUse };
 }
 
 let paymentSelectionState = document.querySelector('input[name="paymentMethod"]:checked')?.value || "Cash on Delivery";
@@ -50,7 +59,8 @@ function renderCheckoutSummary() {
   const container = document.getElementById("checkoutSummary");
   if (!container) return;
 
-  const { cart, subtotal, deliveryFee, discount, total } = getCartSummary();
+  const { cart, subtotal, deliveryFee, discount, total, pcoinUsed, maxPcoinUse } = getCartSummary();
+  const wallet = getPcoinWallet();
 
   if (!cart.length) {
     container.innerHTML = `
@@ -63,7 +73,10 @@ function renderCheckoutSummary() {
       formatCurrency(deliveryFee);
     document.getElementById("summaryDiscount").textContent =
       formatCurrency(discount);
+    document.getElementById("summaryPcoin").textContent = pcoinUsed ? `-${formatCurrency(pcoinUsed)}` : formatCurrency(0);
     document.getElementById("summaryTotal").textContent = formatCurrency(total);
+    document.getElementById("pcoinBalanceCheckout").textContent = wallet.balance.toLocaleString("vi-VN");
+    document.getElementById("pcoinMaxCheckout").textContent = maxPcoinUse.toLocaleString("vi-VN");
     return;
   }
 
@@ -94,7 +107,12 @@ function renderCheckoutSummary() {
     formatCurrency(deliveryFee);
   document.getElementById("summaryDiscount").textContent =
     formatCurrency(discount);
+  document.getElementById("summaryPcoin").textContent = pcoinUsed ? `-${formatCurrency(pcoinUsed)}` : formatCurrency(0);
   document.getElementById("summaryTotal").textContent = formatCurrency(total);
+  document.getElementById("pcoinBalanceCheckout").textContent = wallet.balance.toLocaleString("vi-VN");
+  document.getElementById("pcoinMaxCheckout").textContent = maxPcoinUse.toLocaleString("vi-VN");
+  const orderReward = getPcoinOrderReward();
+  document.getElementById("pcoinOrderReward").textContent = `+${orderReward.amount.toLocaleString("vi-VN")} P-Coin`;
 }
 
 function handleCheckoutSubmit(event) {
@@ -120,7 +138,15 @@ function handleCheckoutSubmit(event) {
     return;
   }
 
-  const { total } = getCartSummary();
+  const { total, subtotal, pcoinUsed, maxPcoinUse } = getCartSummary();
+  const wallet = getPcoinWallet();
+  if (pcoinUsed > wallet.balance || pcoinUsed > maxPcoinUse) {
+    showToast("Số P-Coin sử dụng vượt quá số dư hoặc giới hạn 20%.", "error");
+    return;
+  }
+
+  const orderReward = getPcoinOrderReward();
+  const referralBonus = wallet.referralBonusPending && getOrders().length === 0 ? 1500 : 0;
   const order = {
     id: `FD-${Date.now().toString().slice(-6)}`,
     fullName,
@@ -129,6 +155,9 @@ function handleCheckoutSubmit(event) {
     note,
     paymentMethod,
     items: cart,
+    subtotal,
+    pcoinUsed,
+    pcoinEarned: orderReward.amount + referralBonus,
     total,
     createdAt: new Date().toISOString(),
   };
@@ -138,6 +167,11 @@ function handleCheckoutSubmit(event) {
     return;
   }
 
+  if (pcoinUsed && !redeemPcoins(pcoinUsed, order.id)) {
+    showToast("Đơn đã lưu nhưng chưa trừ được P-Coin. Vui lòng liên hệ hỗ trợ.", "error");
+  }
+  const earned = awardOrderPcoins(order);
+
   clearCart();
   renderCheckoutSummary();
 
@@ -145,10 +179,14 @@ function handleCheckoutSubmit(event) {
   const code = document.getElementById("orderCode");
   if (modal && code) {
     code.textContent = order.id;
+    const rewardLine = document.getElementById("pcoinOrderSuccess");
+    if (rewardLine) {
+      rewardLine.textContent = `+${earned.total.toLocaleString("vi-VN")} P-Coin đã được cộng vào ví.`;
+    }
     modal.classList.remove("hidden");
   }
 
-  showToast("Đặt hàng thành công!", "success");
+  showToast(`Đặt hàng thành công! +${earned.total.toLocaleString("vi-VN")} P-Coin`, "success");
 }
 
 initializePage();
@@ -166,3 +204,17 @@ document.querySelectorAll('input[name="paymentMethod"]').forEach((input) => {
 document
   .getElementById("checkoutForm")
   ?.addEventListener("submit", handleCheckoutSubmit);
+
+document.getElementById("pcoinToUse")?.addEventListener("input", (event) => {
+  const { subtotal, deliveryFee, discount } = getCartSummary();
+  const maxAllowed = getPcoinRedemptionLimit(subtotal + deliveryFee - discount);
+  const requested = Math.max(0, Math.floor(Number(event.target.value) || 0));
+  event.target.value = String(Math.min(requested, maxAllowed));
+  renderCheckoutSummary();
+});
+document.getElementById("useMaxPcoin")?.addEventListener("click", () => {
+  const summary = getCartSummary();
+  const input = document.getElementById("pcoinToUse");
+  if (input) input.value = String(summary.maxPcoinUse);
+  renderCheckoutSummary();
+});

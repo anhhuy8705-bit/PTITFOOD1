@@ -63,33 +63,33 @@ function buildProductCard(product) {
 
   return `
     <article class="food-card group" style="--card-accent: ${accent.accent}; --card-accent-soft: ${accent.soft};">
-      <a href="product-detail.html?id=${product.id}" class="block">
-        <div class="relative overflow-hidden rounded-[1.5rem] bg-[#1e1715] shadow-[0_10px_18px_rgba(120,70,43,0.12)]">
-          <img src="${product.image}" alt="${product.name}" class="h-48 w-full rounded-[1.5rem] object-cover object-center scale-[1.08] transition duration-300 active:scale-[1.12] active:rotate-[-0.5deg] sm:h-52" />
-          <span class="card-accent-tag absolute left-4 top-4">${product.category}</span>
-        </div>
-      </a>
-      <div class="space-y-3 p-4">
-        <div class="flex items-center justify-between gap-2 text-sm" style="color: #d99b79;">
-          <span class="inline-flex items-center gap-1 text-yellow-400">
-            <span>★</span>
-            <span class="font-semibold" style="color: #f8d78d;">${formatRating(product.rating)}</span>
-          </span>
-          <span>(${product.reviewCount} đánh giá)</span>
-        </div>
-        <a href="product-detail.html?id=${product.id}" class="block">
-          <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Restaurant</p>
-          <h3 class="mt-1 text-lg font-bold" style="color: #ffefe2;">${product.name}</h3>
-          <p class="mt-1 text-sm" style="color: #d7aa88;">📍 ${product.restaurant}</p>
+      <div class="food-card-media">
+        <a href="product-detail.html?id=${product.id}" class="food-card-image-link">
+          <img src="${product.image}" alt="${product.name}" class="food-card-image" loading="lazy" />
         </a>
-        <div class="card-extra-info">
-          <div class="text-lg font-black" style="color: #fff;">${formatCurrency(product.price)}</div>
-          <div class="card-time-box">
-            <div class="text-[10px] font-bold uppercase tracking-[0.16em]">Giao</div>
-            <div class="mt-1 text-base font-black">${product.preparationTime} phút</div>
+        <span class="card-accent-tag">${product.category}</span>
+      </div>
+      <div class="food-card-content">
+        <div class="food-card-rating">
+          <span class="food-card-rating-score"><span aria-hidden="true">★</span> ${formatRating(product.rating)}</span>
+          <span class="food-card-review-count">${product.reviewCount} đánh giá</span>
+        </div>
+        <a href="product-detail.html?id=${product.id}" class="food-card-details">
+          <span class="food-card-restaurant-label">Quán ăn</span>
+          <h3 class="food-card-title">${product.name}</h3>
+          <span class="food-card-address">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16 8.2c0 4.2-6 9.3-6 9.3S4 12.4 4 8.2a6 6 0 1 1 12 0Z"/><circle cx="10" cy="8" r="2"/></svg>
+            <span>${product.restaurant}</span>
+          </span>
+        </a>
+        <div class="food-card-bottom">
+          <div class="food-card-price">${formatCurrency(product.price)}</div>
+          <span class="food-card-delivery" aria-label="Thời gian chuẩn bị ${product.preparationTime} phút">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l2.5 1.5"/></svg>
+            <span>${product.preparationTime} phút</span>
           </div>
         </div>
-        <button type="button" class="primary-button mt-1 w-full" data-add-to-cart="${product.id}">Đặt món</button>
+        <button type="button" class="primary-button food-card-order" data-add-to-cart="${product.id}">Đặt món</button>
       </div>
     </article>
   `;

@@ -106,6 +106,12 @@
                         class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 outline-none transition focus:border-orange-300 focus:ring-2 focus:ring-orange-100"
                         placeholder="Mô tả trải nghiệm của bạn..."></textarea>
                 </div>
+                <div class="review-photo-upload">
+                    <label for="reviewPhoto">Ảnh món ăn thực tế <span>(không bắt buộc)</span></label>
+                    <input id="reviewPhoto" type="file" accept="image/*" />
+                    <small>Đánh giá có ảnh sau đơn đầu nhận 1.000 P-Coin; các lần sau +300 điểm, tối đa 2 lần/tuần.</small>
+                    <img id="reviewPhotoPreview" alt="Ảnh xem trước đánh giá" hidden />
+                </div>
                 <button type="submit" class="primary-button">Gửi đánh giá</button>
             </form>
         </section>
